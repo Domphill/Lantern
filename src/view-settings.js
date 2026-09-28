@@ -338,7 +338,7 @@
     if (mode === 'cloud')
       return 'Your entries are saved to your claude.ai account in a private space that only you can read, so they appear wherever you open Lantern while signed in. With the app lock on, everything is encrypted on your device before it’s saved.';
     if (mode === 'memory') return 'This browser isn’t letting Lantern save anything, so your entries will be lost when you close this page. Download a backup before you go.';
-    if (L.env.standalone) return 'Your entries are saved in this app on this device, and nothing is sent anywhere. Removing Lantern from your home screen would erase them, so download a backup now and then.';
+    if (L.env.standalone) return 'Your entries are saved in this app on this device, and nothing is sent anywhere. Removing the app, or clearing its site data, would erase them, so download a backup now and then.';
     return 'Your entries are saved in this browser on this device, and nothing is sent anywhere. Clearing your browser’s site data would erase them, so download a backup now and then.';
   }
 
