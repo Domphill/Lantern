@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Lantern</title>
+    <meta name="description" content="A private companion for mood check-ins, journaling, small goals, and support when things are hard." />
+    <meta name="theme-color" content="#eef1eb" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0e1316" media="(prefers-color-scheme: dark)" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Lantern" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='17.5' r='12' fill='%23e3a33b' fill-opacity='.35'/%3E%3Cpath d='M12.6 6.6a3.4 3.4 0 0 1 6.8 0' fill='none' stroke='%231c2826' stroke-width='1.7' stroke-linecap='round'/%3E%3Cpath d='M10.2 10h11.6l-1.9-3.4h-7.8z' fill='%231c2826'/%3E%3Crect x='11' y='10' width='10' height='12.5' rx='2.4' fill='none' stroke='%231c2826' stroke-width='1.7'/%3E%3Cpath d='M16 12.6c1.9 2 2.4 3.5 2.4 4.5a2.4 2.4 0 0 1-4.8 0c0-1 .5-2.5 2.4-4.5z' fill='%23e3a33b'/%3E%3Crect x='9.8' y='22.5' width='12.4' height='2.6' rx='1' fill='%231c2826'/%3E%3C/svg%3E" />
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+    <link rel="stylesheet" href="fonts/fonts.css" />
+    <link rel="stylesheet" href="src/app.css" />
+  </head>
+  <body>
+    <div id="app"></div>
+    <noscript><p style="padding: 24px; font-family: sans-serif">Lantern needs JavaScript turned on.</p></noscript>
+    <!-- build:scripts (build.ps1 reads this list, in this order) -->
+    <script src="src/core.js"></script>
+    <script src="src/crypto.js"></script>
+    <script src="src/store.js"></script>
+    <script src="src/ui.js"></script>
+    <script src="src/charts.js"></script>
+    <script src="src/view-today.js"></script>
+    <script src="src/view-journal.js"></script>
+    <script src="src/view-goals.js"></script>
+    <script src="src/view-insights.js"></script>
+    <script src="src/view-toolkit.js"></script>
+    <script src="src/view-support.js"></script>
+    <script src="src/view-settings.js"></script>
+    <script src="src/demo.js"></script>
+    <script src="src/app.js"></script>
+    <!-- /build:scripts -->
+    <script>
+      /* Offline support for the hosted version (https, or a local test server). The file:// and
+         claude.ai versions have no worker and skip this. */
+      (function () {
+        if (!('serviceWorker' in navigator)) return;
+        var local = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+        if (location.protocol !== 'https:' && !local) return;
+        var hadWorker = !!navigator.serviceWorker.controller;
+        window.addEventListener('load', function () {
+          navigator.serviceWorker.register('sw.js').catch(function (e) {
+            console.warn('Lantern: offline support unavailable', e);
+          });
+        });
+        navigator.serviceWorker.addEventListener('controllerchange', function () {
+          if (!hadWorker) return;
+          var L = window.Lantern;
+          if (L && L.ui && typeof L.ui.toast === 'function') L.ui.toast('Lantern has been updated. The new version is ready the next time you open it.');
+        });
+      })();
+    </script>
+  </body>
+</html>
